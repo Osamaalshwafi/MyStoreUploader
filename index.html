@@ -1,0 +1,1937 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AppCloud | سحابة التطبيقات - منصتك الموثوقة لتحميل التطبيقات</title>
+    <meta name="description" content="AppCloud - سحابة التطبيقات، منصتك الموثوقة لتحميل تطبيقات الحاسوب والهاتف والمواد التعليمية. سرعة، أمان، وثقة تامة. ✔️">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0e17;
+            --bg-secondary: #111827;
+            --bg-card: #1a1f2e;
+            --bg-glass: rgba(26, 31, 46, 0.75);
+            --border-glass: rgba(255, 255, 255, 0.08);
+            --text-primary: #f1f5f9;
+            --text-secondary: #b0b8c4;
+            --text-muted: #6b7280;
+            --accent: #6366f1;
+            --accent-light: #818cf8;
+            --accent-glow: rgba(99, 102, 241, 0.35);
+            --green: #10b981;
+            --green-glow: rgba(16, 185, 129, 0.4);
+            --orange: #f59e0b;
+            --orange-glow: rgba(245, 158, 11, 0.35);
+            --red: #ef4444;
+            --radius-sm: 10px;
+            --radius: 16px;
+            --radius-lg: 24px;
+            --radius-xl: 32px;
+            --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
+            --shadow-glow: 0 0 30px var(--accent-glow);
+            --shadow-green: 0 0 25px var(--green-glow);
+            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --font-ar: 'Tajawal', sans-serif;
+            --font-en: 'Inter', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-ar);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            line-height: 1.6;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+
+        /* ============ BACKGROUND ANIMATED BUBBLES ============ */
+        .bg-bubbles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+        .bg-bubble {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, rgba(99, 102, 241, 0.15), rgba(16, 185, 129, 0.05));
+            animation: floatUp linear infinite;
+            opacity: 0.5;
+        }
+        @keyframes floatUp {
+            0% {
+                transform: translateY(110vh) scale(0.3) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.5;
+            }
+            90% {
+                opacity: 0.4;
+            }
+            100% {
+                transform: translateY(-15vh) scale(1.2) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        .bg-bubble:nth-child(1) {
+            left: 5%;
+            width: 80px;
+            height: 80px;
+            animation-duration: 18s;
+            animation-delay: 0s;
+        }
+        .bg-bubble:nth-child(2) {
+            left: 15%;
+            width: 120px;
+            height: 120px;
+            animation-duration: 22s;
+            animation-delay: 2s;
+        }
+        .bg-bubble:nth-child(3) {
+            left: 28%;
+            width: 60px;
+            height: 60px;
+            animation-duration: 15s;
+            animation-delay: 5s;
+        }
+        .bg-bubble:nth-child(4) {
+            left: 42%;
+            width: 100px;
+            height: 100px;
+            animation-duration: 20s;
+            animation-delay: 1s;
+        }
+        .bg-bubble:nth-child(5) {
+            left: 55%;
+            width: 70px;
+            height: 70px;
+            animation-duration: 16s;
+            animation-delay: 3s;
+        }
+        .bg-bubble:nth-child(6) {
+            left: 65%;
+            width: 90px;
+            height: 90px;
+            animation-duration: 24s;
+            animation-delay: 7s;
+        }
+        .bg-bubble:nth-child(7) {
+            left: 75%;
+            width: 50px;
+            height: 50px;
+            animation-duration: 14s;
+            animation-delay: 4s;
+        }
+        .bg-bubble:nth-child(8) {
+            left: 85%;
+            width: 110px;
+            height: 110px;
+            animation-duration: 21s;
+            animation-delay: 6s;
+        }
+        .bg-bubble:nth-child(9) {
+            left: 92%;
+            width: 65px;
+            height: 65px;
+            animation-duration: 17s;
+            animation-delay: 8s;
+        }
+        .bg-bubble:nth-child(10) {
+            left: 35%;
+            width: 95px;
+            height: 95px;
+            animation-duration: 23s;
+            animation-delay: 9s;
+        }
+
+        /* Grid overlay */
+        .bg-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.03;
+            background-image: linear-gradient(rgba(255, 255, 255, 0.5) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.5) 1px, transparent 1px);
+            background-size: 50px 50px;
+        }
+
+        /* ============ MAIN CONTAINER ============ */
+        .main-container {
+            position: relative;
+            z-index: 1;
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 20px 24px 40px;
+        }
+
+        /* ============ HEADER ============ */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+            padding: 16px 24px;
+            background: var(--bg-glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border-glass);
+            border-radius: var(--radius-lg);
+            margin-bottom: 28px;
+            box-shadow: var(--shadow-card);
+            animation: slideDown 0.6s ease-out;
+        }
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .logo-section:hover {
+            transform: scale(1.03);
+        }
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: var(--radius-sm);
+            background: linear-gradient(135deg, var(--accent), #8b5cf6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            box-shadow: var(--shadow-glow);
+            animation: pulse-glow 3s ease-in-out infinite;
+        }
+        @keyframes pulse-glow {
+            0%,
+            100% {
+                box-shadow: 0 0 20px var(--accent-glow);
+            }
+            50% {
+                box-shadow: 0 0 40px var(--accent-glow), 0 0 60px rgba(99, 102, 241, 0.2);
+            }
+        }
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+        }
+        .logo-text .ar-name {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            letter-spacing: -0.5px;
+            line-height: 1.2;
+        }
+        .logo-text .en-name {
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--accent-light);
+            font-family: var(--font-en);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        .search-wrapper {
+            position: relative;
+            flex: 1;
+            min-width: 250px;
+            max-width: 450px;
+        }
+        .search-input {
+            width: 100%;
+            padding: 14px 48px 14px 20px;
+            border-radius: 50px;
+            border: 2px solid var(--border-glass);
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-family: var(--font-ar);
+            font-size: 0.95rem;
+            transition: var(--transition);
+            outline: none;
+        }
+        .search-input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 25px var(--accent-glow);
+        }
+        .search-input::placeholder {
+            color: var(--text-muted);
+            font-family: var(--font-ar);
+        }
+        .search-icon {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            pointer-events: none;
+            transition: var(--transition);
+        }
+        .search-input:focus~.search-icon {
+            color: var(--accent-light);
+        }
+        .header-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .btn-admin-entry {
+            padding: 10px 18px;
+            border-radius: 50px;
+            border: 1.5px solid rgba(255, 255, 255, 0.2);
+            background: transparent;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-family: var(--font-ar);
+            font-size: 0.85rem;
+            transition: var(--transition);
+            white-space: nowrap;
+            backdrop-filter: blur(10px);
+        }
+        .btn-admin-entry:hover {
+            border-color: var(--accent-light);
+            color: var(--text-primary);
+            background: rgba(99, 102, 241, 0.1);
+            box-shadow: 0 0 20px var(--accent-glow);
+        }
+
+        /* ============ STATS BUBBLES ROW ============ */
+        .stats-row {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 32px;
+            animation: fadeInUp 0.7s ease-out 0.2s both;
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(25px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .stat-bubble {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            cursor: default;
+            position: relative;
+            transition: var(--transition);
+            animation: floatBubble 4s ease-in-out infinite;
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1.5px solid var(--border-glass);
+            box-shadow: var(--shadow-card);
+        }
+        .stat-bubble:nth-child(1) {
+            background: var(--bg-glass);
+            animation-delay: 0s;
+        }
+        .stat-bubble:nth-child(2) {
+            background: rgba(16, 185, 129, 0.15);
+            border-color: rgba(16, 185, 129, 0.3);
+            animation-delay: 0.6s;
+        }
+        .stat-bubble:nth-child(3) {
+            background: rgba(245, 158, 11, 0.12);
+            border-color: rgba(245, 158, 11, 0.3);
+            animation-delay: 1.2s;
+        }
+        @keyframes floatBubble {
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-12px);
+            }
+        }
+        .stat-bubble:hover {
+            transform: translateY(-16px) scale(1.06);
+            box-shadow: var(--shadow-glow);
+            z-index: 2;
+        }
+        .stat-bubble:nth-child(2):hover {
+            box-shadow: var(--shadow-green);
+        }
+        .stat-bubble:nth-child(3):hover {
+            box-shadow: 0 0 30px var(--orange-glow);
+        }
+        .stat-bubble .stat-icon {
+            font-size: 2rem;
+            margin-bottom: 4px;
+        }
+        .stat-bubble .stat-number {
+            font-size: 1.8rem;
+            font-weight: 800;
+            font-family: var(--font-en);
+            color: var(--text-primary);
+        }
+        .stat-bubble .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+            margin-top: 2px;
+        }
+        .trust-check {
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--green);
+        }
+        .trust-check .check-icon {
+            font-size: 1.5rem;
+            animation: popIn 0.5s ease-out;
+        }
+        @keyframes popIn {
+            0% {
+                transform: scale(0);
+                opacity: 0;
+            }
+            70% {
+                transform: scale(1.3);
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* ============ CATEGORY BUTTONS ============ */
+        .categories-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 28px;
+            animation: fadeInUp 0.7s ease-out 0.35s both;
+        }
+        .cat-btn {
+            padding: 11px 22px;
+            border-radius: 50px;
+            border: 1.5px solid var(--border-glass);
+            background: var(--bg-glass);
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-family: var(--font-ar);
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: var(--transition);
+            backdrop-filter: blur(10px);
+            white-space: nowrap;
+            position: relative;
+            overflow: hidden;
+        }
+        .cat-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, var(--accent), #8b5cf6);
+            opacity: 0;
+            transition: opacity 0.3s;
+            border-radius: 50px;
+            z-index: -1;
+        }
+        .cat-btn:hover {
+            border-color: var(--accent-light);
+            color: var(--text-primary);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+        }
+        .cat-btn.active {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: #fff;
+            font-weight: 700;
+            box-shadow: var(--shadow-glow);
+        }
+        .cat-btn.active::before {
+            opacity: 1;
+        }
+        .cat-count {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            margin-right: 6px;
+            font-weight: 600;
+            font-family: var(--font-en);
+        }
+
+        /* ============ APPS GRID ============ */
+        .apps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+            animation: fadeInUp 0.7s ease-out 0.5s both;
+        }
+        .app-card {
+            background: var(--bg-glass);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--border-glass);
+            border-radius: var(--radius);
+            padding: 20px;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: var(--shadow-card);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .app-card::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.06) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.4s;
+            pointer-events: none;
+        }
+        .app-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5), 0 0 30px var(--accent-glow);
+            border-color: rgba(99, 102, 241, 0.4);
+        }
+        .app-card:hover::after {
+            opacity: 1;
+        }
+        .app-card-top {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+        }
+        .app-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: var(--radius-sm);
+            background: linear-gradient(135deg, #1e293b, #2d3748);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            flex-shrink: 0;
+            border: 1px solid var(--border-glass);
+        }
+        .app-card-info {
+            flex: 1;
+            min-width: 0;
+        }
+        .app-name-ar {
+            font-weight: 700;
+            font-size: 1.05rem;
+            color: var(--text-primary);
+            line-height: 1.3;
+            margin-bottom: 2px;
+        }
+        .app-name-en {
+            font-family: var(--font-en);
+            font-size: 0.78rem;
+            color: var(--accent-light);
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+        .app-version-badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 20px;
+            background: rgba(99, 102, 241, 0.2);
+            color: var(--accent-light);
+            font-size: 0.7rem;
+            font-weight: 600;
+            font-family: var(--font-en);
+            margin-top: 6px;
+            letter-spacing: 0.5px;
+        }
+        .app-short-desc {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .app-card-bottom {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: auto;
+        }
+        .app-downloads-mini {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .btn-download-sm {
+            padding: 9px 18px;
+            border-radius: 50px;
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            font-family: var(--font-ar);
+            font-size: 0.82rem;
+            font-weight: 600;
+            transition: var(--transition);
+            white-space: nowrap;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+        }
+        .btn-download-sm:hover {
+            background: #4f46e5;
+            box-shadow: 0 6px 25px rgba(99, 102, 241, 0.5);
+            transform: scale(1.04);
+        }
+        .btn-download-sm:active {
+            transform: scale(0.96);
+            transition: 0.1s;
+        }
+
+        /* Empty state */
+        .empty-state {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-muted);
+        }
+        .empty-state .empty-icon {
+            font-size: 4rem;
+            display: block;
+            margin-bottom: 16px;
+            opacity: 0.6;
+        }
+        .empty-state p {
+            font-size: 1.1rem;
+        }
+
+        /* ============ MODAL ============ */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            animation: fadeIn 0.25s ease-out;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        .modal-content {
+            background: var(--bg-card);
+            border: 1px solid var(--border-glass);
+            border-radius: var(--radius-lg);
+            padding: 28px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+            animation: scaleIn 0.3s ease-out;
+            position: relative;
+        }
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        .modal-close {
+            position: sticky;
+            top: 0;
+            float: left;
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            border: 1px solid var(--border-glass);
+            background: var(--bg-glass);
+            color: var(--text-primary);
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            z-index: 5;
+            backdrop-filter: blur(10px);
+        }
+        .modal-close:hover {
+            background: var(--red);
+            border-color: var(--red);
+            color: #fff;
+        }
+        .modal-app-icon {
+            font-size: 3.5rem;
+            text-align: center;
+            margin-bottom: 12px;
+        }
+        .modal-app-name-ar {
+            font-size: 1.5rem;
+            font-weight: 800;
+            text-align: center;
+            color: var(--text-primary);
+        }
+        .modal-app-name-en {
+            font-family: var(--font-en);
+            font-size: 0.9rem;
+            color: var(--accent-light);
+            text-align: center;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+        .modal-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin: 14px 0;
+        }
+        .modal-meta span {
+            padding: 6px 14px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-glass);
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            font-family: var(--font-en);
+        }
+        .modal-full-desc {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            font-size: 0.9rem;
+            margin: 16px 0;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-glass);
+        }
+        .btn-download-lg {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            border-radius: 50px;
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            font-family: var(--font-ar);
+            font-size: 1rem;
+            font-weight: 700;
+            transition: var(--transition);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.35);
+            text-align: center;
+            margin-top: 8px;
+        }
+        .btn-download-lg:hover {
+            background: #4f46e5;
+            box-shadow: 0 10px 35px rgba(99, 102, 241, 0.55);
+            transform: translateY(-2px);
+        }
+
+        /* ============ ADMIN PANEL ============ */
+        .admin-panel {
+            display: none;
+        }
+        .admin-panel.open {
+            display: block;
+        }
+        .admin-content {
+            max-width: 750px;
+            max-height: 90vh;
+        }
+        .admin-section {
+            margin-bottom: 20px;
+            padding: 16px;
+            border-radius: var(--radius);
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-glass);
+        }
+        .admin-section h3 {
+            margin-bottom: 12px;
+            color: var(--accent-light);
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .admin-form-group {
+            margin-bottom: 12px;
+        }
+        .admin-form-group label {
+            display: block;
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+            margin-bottom: 4px;
+            font-weight: 500;
+        }
+        .admin-form-group input,
+        .admin-form-group textarea,
+        .admin-form-group select {
+            width: 100%;
+            padding: 10px 14px;
+            border-radius: var(--radius-sm);
+            border: 1.5px solid var(--border-glass);
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-family: var(--font-ar);
+            font-size: 0.9rem;
+            transition: var(--transition);
+            outline: none;
+            resize: vertical;
+        }
+        .admin-form-group input:focus,
+        .admin-form-group textarea:focus,
+        .admin-form-group select:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 15px var(--accent-glow);
+        }
+        .admin-form-row {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .admin-form-row .admin-form-group {
+            flex: 1;
+            min-width: 140px;
+        }
+        .btn-admin {
+            padding: 10px 20px;
+            border-radius: 50px;
+            border: none;
+            cursor: pointer;
+            font-family: var(--font-ar);
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: var(--transition);
+            white-space: nowrap;
+        }
+        .btn-save {
+            background: var(--accent);
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+        }
+        .btn-save:hover {
+            background: #4f46e5;
+            box-shadow: 0 6px 25px rgba(99, 102, 241, 0.5);
+        }
+        .btn-danger {
+            background: var(--red);
+            color: #fff;
+        }
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+        .btn-secondary {
+            background: var(--bg-glass);
+            color: var(--text-primary);
+            border: 1px solid var(--border-glass);
+        }
+        .btn-secondary:hover {
+            border-color: var(--accent-light);
+        }
+        .admin-app-list-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 10px 14px;
+            border-radius: var(--radius-sm);
+            background: rgba(255, 255, 255, 0.03);
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+            border: 1px solid transparent;
+            transition: var(--transition);
+        }
+        .admin-app-list-item:hover {
+            border-color: var(--border-glass);
+            background: rgba(255, 255, 255, 0.05);
+        }
+        .admin-app-list-item .app-title {
+            font-weight: 600;
+            font-size: 0.9rem;
+            flex: 1;
+            min-width: 120px;
+        }
+        .admin-app-list-item .app-meta-small {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            font-family: var(--font-en);
+        }
+        .file-input-wrapper {
+            position: relative;
+        }
+        .file-input-wrapper input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            border-radius: var(--radius-sm);
+            border: 1.5px dashed var(--border-glass);
+            background: transparent;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-family: var(--font-ar);
+            transition: var(--transition);
+        }
+        .file-input-wrapper input[type="file"]:hover {
+            border-color: var(--accent-light);
+            background: rgba(99, 102, 241, 0.05);
+        }
+        .instructions-box {
+            background: rgba(16, 185, 129, 0.06);
+            border: 1px solid rgba(16, 185, 129, 0.25);
+            border-radius: var(--radius-sm);
+            padding: 14px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            max-height: 250px;
+            overflow-y: auto;
+        }
+        .instructions-box code {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.78rem;
+            color: var(--green);
+            word-break: break-all;
+        }
+
+        /* ============ TOAST ============ */
+        .toast-container {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 200;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            pointer-events: none;
+        }
+        .toast {
+            padding: 12px 22px;
+            border-radius: 50px;
+            font-family: var(--font-ar);
+            font-size: 0.85rem;
+            font-weight: 500;
+            animation: toastIn 0.4s ease-out, toastOut 0.4s 2.5s ease-in forwards;
+            text-align: center;
+            pointer-events: auto;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+            white-space: nowrap;
+        }
+        .toast-success {
+            background: rgba(16, 185, 129, 0.9);
+            color: #fff;
+        }
+        .toast-error {
+            background: rgba(239, 68, 68, 0.9);
+            color: #fff;
+        }
+        .toast-info {
+            background: rgba(99, 102, 241, 0.9);
+            color: #fff;
+        }
+        @keyframes toastIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes toastOut {
+            from {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+        }
+
+        /* ============ FOOTER ============ */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--text-muted);
+            font-size: 0.78rem;
+            border-top: 1px solid var(--border-glass);
+            margin-top: 20px;
+        }
+
+        /* ============ RESPONSIVE ============ */
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 12px;
+                padding: 14px 16px;
+            }
+            .search-wrapper {
+                max-width: 100%;
+            }
+            .stats-row {
+                gap: 12px;
+            }
+            .stat-bubble {
+                width: 110px;
+                height: 110px;
+            }
+            .stat-bubble .stat-number {
+                font-size: 1.3rem;
+            }
+            .stat-bubble .stat-icon {
+                font-size: 1.5rem;
+            }
+            .stat-bubble .stat-label {
+                font-size: 0.68rem;
+            }
+            .apps-grid {
+                grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+                gap: 14px;
+            }
+            .app-card {
+                padding: 16px;
+            }
+            .modal-content {
+                padding: 18px;
+                max-width: 95vw;
+            }
+            .cat-btn {
+                padding: 9px 15px;
+                font-size: 0.8rem;
+            }
+            .logo-text .ar-name {
+                font-size: 1.2rem;
+            }
+            .btn-admin-entry {
+                font-size: 0.75rem;
+                padding: 8px 14px;
+            }
+        }
+        @media (max-width: 400px) {
+            .stat-bubble {
+                width: 90px;
+                height: 90px;
+            }
+            .stat-bubble .stat-number {
+                font-size: 1.1rem;
+            }
+            .stat-bubble .stat-icon {
+                font-size: 1.2rem;
+            }
+            .stat-bubble .stat-label {
+                font-size: 0.6rem;
+            }
+            .apps-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ============ BACKGROUND EFFECTS ============ -->
+    <div class="bg-bubbles">
+        <div class="bg-bubble"></div><div class="bg-bubble"></div><div class="bg-bubble"></div>
+        <div class="bg-bubble"></div><div class="bg-bubble"></div><div class="bg-bubble"></div>
+        <div class="bg-bubble"></div><div class="bg-bubble"></div><div class="bg-bubble"></div>
+        <div class="bg-bubble"></div>
+    </div>
+    <div class="bg-grid"></div>
+
+    <!-- ============ MAIN CONTAINER ============ -->
+    <div class="main-container" id="mainContainer">
+        <!-- HEADER -->
+        <header class="header">
+            <div class="logo-section" onclick="resetFilters()" title="الرئيسية">
+                <div class="logo-icon">☁️</div>
+                <div class="logo-text">
+                    <span class="ar-name">سحابة التطبيقات</span>
+                    <span class="en-name">AppCloud</span>
+                </div>
+            </div>
+            <div class="search-wrapper">
+                <input type="text" class="search-input" id="searchInput" placeholder="🔍 ابحث عن تطبيق...">
+                <span class="search-icon">🔎</span>
+            </div>
+            <div class="header-actions">
+                <button class="btn-admin-entry" onclick="openAdminLogin()" title="لوحة التحكم">⚙️ لوحة التحكم</button>
+            </div>
+        </header>
+
+        <!-- STATS BUBBLES -->
+        <div class="stats-row" id="statsRow">
+            <div class="stat-bubble">
+                <span class="stat-icon">📦</span>
+                <span class="stat-number" id="totalApps">0</span>
+                <span class="stat-label">تطبيق متاح</span>
+            </div>
+            <div class="stat-bubble">
+                <span class="stat-icon">⬇️</span>
+                <span class="stat-number" id="totalDownloads">0</span>
+                <span class="stat-label">إجمالي التحميلات</span>
+            </div>
+            <div class="stat-bubble">
+                <span class="trust-check">
+                    <span class="check-icon">✔️</span> ثقة وأمان
+                </span>
+                <span class="stat-label">موثوق 100%</span>
+            </div>
+        </div>
+
+        <!-- CATEGORIES -->
+        <div class="categories-row" id="categoriesRow">
+            <button class="cat-btn active" data-cat="all">📋 <span class="cat-count" id="countAll">0</span> الكل</button>
+            <button class="cat-btn" data-cat="pc">🖥️ <span class="cat-count" id="countPC">0</span> تطبيقات الحاسوب</button>
+            <button class="cat-btn" data-cat="phone">📱 <span class="cat-count" id="countPhone">0</span> تطبيقات الهاتف</button>
+            <button class="cat-btn" data-cat="educational">📚 <span class="cat-count" id="countEdu">0</span> مواد تعليمية</button>
+            <button class="cat-btn" data-cat="other">📌 <span class="cat-count" id="countOther">0</span> أخرى</button>
+        </div>
+
+        <!-- APPS GRID -->
+        <div class="apps-grid" id="appsGrid"></div>
+
+        <!-- FOOTER -->
+        <div class="footer">
+            © 2025 <strong>AppCloud | سحابة التطبيقات</strong> - جميع الحقوق محفوظة | ثقة ✔️ أمان ✔️ سرعة ✔️
+        </div>
+    </div>
+
+    <!-- ============ APP DETAIL MODAL ============ -->
+    <div class="modal-overlay" id="appDetailModal" style="display:none;" onclick="closeAppDetail(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeAppDetail()">✕</button>
+            <div id="appDetailContent"></div>
+        </div>
+    </div>
+
+    <!-- ============ ADMIN LOGIN MODAL ============ -->
+    <div class="modal-overlay" id="adminLoginModal" style="display:none;" onclick="closeAdminLogin(event)">
+        <div class="modal-content" style="max-width:420px;" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeAdminLogin()">✕</button>
+            <h2 style="text-align:center;margin-bottom:16px;">🔐 دخول لوحة التحكم</h2>
+            <div class="admin-form-group">
+                <label>كلمة المرور</label>
+                <input type="password" id="adminPasswordInput" placeholder="أدخل كلمة المرور..." onkeydown="if(event.key==='Enter')verifyAdminLogin()">
+            </div>
+            <button class="btn-admin btn-save" style="width:100%;" onclick="verifyAdminLogin()">دخول</button>
+            <p style="text-align:center;font-size:0.7rem;color:var(--text-muted);margin-top:10px;">كلمة المرور الافتراضية: <code>admin123</code></p>
+        </div>
+    </div>
+
+    <!-- ============ ADMIN PANEL MODAL ============ -->
+    <div class="modal-overlay admin-panel" id="adminPanel" style="display:none;" onclick="closeAdminPanel(event)">
+        <div class="modal-content admin-content" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeAdminPanel()">✕</button>
+            <h2 style="text-align:center;margin-bottom:20px;color:var(--accent-light);">⚙️ لوحة التحكم</h2>
+
+            <!-- Telegram Settings -->
+            <div class="admin-section">
+                <h3>🤖 إعدادات بوت تيليجرام</h3>
+                <div class="admin-form-group">
+                    <label>Token بوت تيليجرام</label>
+                    <input type="text" id="tgBotToken" placeholder="مثال: 123456:ABCdefGHIjklMNOpqrsTUVwxyz">
+                </div>
+                <div class="admin-form-group">
+                    <label>Chat ID القناة (أو @username)</label>
+                    <input type="text" id="tgChatId" placeholder="مثال: @MyAppChannel أو -1001234567890">
+                </div>
+                <button class="btn-admin btn-save" onclick="saveTelegramSettings()">💾 حفظ إعدادات تيليجرام</button>
+                <button class="btn-admin btn-secondary" style="margin-right:8px;" onclick="testTelegramConnection()">🔌 اختبار الاتصال</button>
+                <details style="margin-top:12px;">
+                    <summary style="cursor:pointer;color:var(--accent-light);font-weight:600;font-size:0.85rem;">📖 تعليمات إنشاء البوت والقناة واستخراج API</summary>
+                    <div class="instructions-box" style="margin-top:8px;">
+                        <strong>1️⃣ إنشاء بوت تيليجرام:</strong><br>
+                        • افتح تيليجرام وابحث عن <code>@BotFather</code><br>
+                        • أرسل <code>/newbot</code> واتبع التعليمات<br>
+                        • اختر اسمًا للبوت ثم اسم مستخدم ينتهي بـ <code>bot</code><br>
+                        • ستحصل على <strong>Token</strong> يشبه: <code>123456:ABCdefGH...</code><br><br>
+                        <strong>2️⃣ إنشاء قناة تيليجرام:</strong><br>
+                        • أنشئ قناة جديدة (خاصة أو عامة)<br>
+                        • اختر اسم مستخدم للقناة مثل <code>@MyAppChannel</code><br><br>
+                        <strong>3️⃣ إضافة البوت كمسؤول للقناة:</strong><br>
+                        • اذهب للقناة → الإعدادات → المسؤولون<br>
+                        • أضف البوت كمسؤول مع صلاحيات "نشر الرسائل" و"تحرير الرسائل"<br><br>
+                        <strong>4️⃣ الحصول على Chat ID:</strong><br>
+                        • للقنوات العامة: استخدم <code>@username</code> مباشرة<br>
+                        • للقنوات الخاصة: أرسل رسالة للقناة ثم زر:<br>
+                        <code>https://api.telegram.org/bot[TOKEN]/getUpdates</code><br>
+                        • ابحث عن <code>"chat":{"id":-100xxx...}</code><br><br>
+                        <strong>⚠️ ملاحظة أمنية:</strong> في هذا التطبيق (ملف HTML واحد)، التوكن يُخزَّن في المتصفح. للاستخدام الشخصي هذا مقبول، لكن للإنتاج يُفضل استخدام خادم وسيط.
+                    </div>
+                </details>
+            </div>
+
+            <!-- Add/Edit App Form -->
+            <div class="admin-section">
+                <h3 id="formTitle">➕ إضافة تطبيق جديد</h3>
+                <input type="hidden" id="editingAppId" value="">
+                <div class="admin-form-row">
+                    <div class="admin-form-group">
+                        <label>اسم التطبيق (عربي) *</label>
+                        <input type="text" id="appNameAr" placeholder="مثال: واتساب بلس">
+                    </div>
+                    <div class="admin-form-group">
+                        <label>اسم التطبيق (English) *</label>
+                        <input type="text" id="appNameEn" placeholder="Example: WhatsApp Plus" style="font-family:var(--font-en);">
+                    </div>
+                </div>
+                <div class="admin-form-row">
+                    <div class="admin-form-group">
+                        <label>الإصدار (Version)</label>
+                        <input type="text" id="appVersion" placeholder="مثال: 2.24.1.0" style="font-family:var(--font-en);">
+                    </div>
+                    <div class="admin-form-group">
+                        <label>الفئة</label>
+                        <select id="appCategory">
+                            <option value="pc">🖥️ تطبيقات الحاسوب</option>
+                            <option value="phone">📱 تطبيقات الهاتف</option>
+                            <option value="educational">📚 مواد تعليمية</option>
+                            <option value="other">📌 أخرى</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="admin-form-group">
+                    <label>وصف مختصر (يظهر تحت التطبيق)</label>
+                    <textarea id="appShortDesc" rows="2" placeholder="وصف مختصر من سطر إلى سطرين..."></textarea>
+                </div>
+                <div class="admin-form-group">
+                    <label>وصف كامل (يظهر عند الضغط على التطبيق)</label>
+                    <textarea id="appFullDesc" rows="3" placeholder="وصف تفصيلي كامل للتطبيق..."></textarea>
+                </div>
+                <div class="admin-form-group file-input-wrapper">
+                    <label>📁 اختر ملف التطبيق من التخزين المحلي (للتطبيقات الجديدة أو لتحديث الملف)</label>
+                    <input type="file" id="appFileInput">
+                    <small style="color:var(--text-muted);">الحد الأقصى: 50 ميجابايت (للبوتات العادية) | اتركه فارغًا إذا كنت تعدل فقط البيانات دون تغيير الملف</small>
+                </div>
+                <div style="display:flex;gap:10px;flex-wrap:wrap;">
+                    <button class="btn-admin btn-save" onclick="saveApp()">💾 حفظ التطبيق ورفعه</button>
+                    <button class="btn-admin btn-secondary" onclick="resetForm()">🔄 إعادة تعيين النموذج</button>
+                    <button class="btn-admin btn-secondary" onclick="changeAdminPasswordPrompt()">🔑 تغيير كلمة المرور</button>
+                </div>
+                <div id="uploadProgress" style="margin-top:10px;display:none;">
+                    <progress id="uploadProgressBar" value="0" max="100" style="width:100%;height:8px;border-radius:4px;"></progress>
+                    <small style="color:var(--text-muted);">جاري الرفع إلى تيليجرام...</small>
+                </div>
+            </div>
+
+            <!-- Existing Apps List -->
+            <div class="admin-section">
+                <h3>📋 التطبيقات الموجودة</h3>
+                <div id="adminAppList" style="max-height:350px;overflow-y:auto;"></div>
+                <button class="btn-admin btn-danger" style="margin-top:10px;" onclick="clearAllApps()">🗑️ حذف جميع التطبيقات</button>
+            </div>
+
+            <button class="btn-admin btn-secondary" style="width:100%;margin-top:10px;" onclick="closeAdminPanel()">🚪 إغلاق لوحة التحكم</button>
+        </div>
+    </div>
+
+    <!-- ============ TOAST CONTAINER ============ -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script>
+        // ==================== STATE MANAGEMENT ====================
+        const STORAGE_KEY = 'appcloud_data';
+        const SETTINGS_KEY = 'appcloud_settings';
+
+        function getDefaultSettings() {
+            return {
+                botToken: '',
+                chatId: '',
+                adminPassword: 'admin123'
+            };
+        }
+
+        function getDefaultApps() {
+            return [
+                {
+                    id: 'demo1',
+                    nameAr: 'متجر تطبيقات تجريبي',
+                    nameEn: 'Demo App Store',
+                    version: '1.0.0',
+                    category: 'pc',
+                    shortDesc: 'هذا تطبيق تجريبي. قم بإعداد بوت تيليجرام لبدء رفع التطبيقات الحقيقية.',
+                    fullDesc: 'هذا تطبيق تجريبي مُضاف افتراضيًا. لبدء استخدام المنصة بشكل كامل:\n\n1. افتح لوحة التحكم (⚙️)\n2. أدخل كلمة المرور الافتراضية: admin123\n3. قم بإعداد بوت تيليجرام والقناة\n4. ارفع تطبيقاتك الحقيقية\n\nسيتم تخزين الملفات على قناتك في تيليجرام وسيتمكن المستخدمون من تحميلها مباشرة.',
+                    telegramFileId: '',
+                    fileName: '',
+                    fileSize: '0',
+                    downloads: 0,
+                    dateAdded: new Date().toISOString(),
+                    icon: '📦'
+                }
+            ];
+        }
+
+        function loadData() {
+            try {
+                const raw = localStorage.getItem(STORAGE_KEY);
+                if (raw) {
+                    const data = JSON.parse(raw);
+                    if (data.apps && Array.isArray(data.apps)) return data;
+                }
+            } catch (e) {}
+            return { apps: getDefaultApps() };
+        }
+
+        function saveData(data) {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+            } catch (e) {
+                showToast('⚠️ سعة التخزين المحلي ممتلئة!', 'error');
+            }
+        }
+
+        function loadSettings() {
+            try {
+                const raw = localStorage.getItem(SETTINGS_KEY);
+                if (raw) {
+                    const s = JSON.parse(raw);
+                    return { ...getDefaultSettings(), ...s };
+                }
+            } catch (e) {}
+            return getDefaultSettings();
+        }
+
+        function saveSettings(settings) {
+            try {
+                localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+            } catch (e) {
+                showToast('⚠️ خطأ في حفظ الإعدادات!', 'error');
+            }
+        }
+
+        let appData = loadData();
+        let settings = loadSettings();
+        let currentCategory = 'all';
+        let searchQuery = '';
+
+        // ==================== TOAST SYSTEM ====================
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            toast.textContent = message;
+            container.appendChild(toast);
+            setTimeout(() => { toast.remove(); }, 3000);
+        }
+
+        // ==================== STATS UPDATE ====================
+        function updateStats() {
+            const apps = appData.apps;
+            document.getElementById('totalApps').textContent = apps.length;
+            const totalDl = apps.reduce((sum, a) => sum + (a.downloads || 0), 0);
+            document.getElementById('totalDownloads').textContent = totalDl >= 1000 ? (totalDl / 1000).toFixed(
+                1) + 'k' : totalDl;
+
+            // Category counts
+            const countAll = apps.length;
+            const countPC = apps.filter(a => a.category === 'pc').length;
+            const countPhone = apps.filter(a => a.category === 'phone').length;
+            const countEdu = apps.filter(a => a.category === 'educational').length;
+            const countOther = apps.filter(a => a.category === 'other').length;
+
+            document.getElementById('countAll').textContent = countAll;
+            document.getElementById('countPC').textContent = countPC;
+            document.getElementById('countPhone').textContent = countPhone;
+            document.getElementById('countEdu').textContent = countEdu;
+            document.getElementById('countOther').textContent = countOther;
+        }
+
+        // ==================== RENDER APPS GRID ====================
+        function getFilteredApps() {
+            let apps = [...appData.apps];
+            if (currentCategory !== 'all') {
+                apps = apps.filter(a => a.category === currentCategory);
+            }
+            if (searchQuery.trim()) {
+                const q = searchQuery.trim().toLowerCase();
+                apps = apps.filter(a =>
+                    a.nameAr.toLowerCase().includes(q) ||
+                    a.nameEn.toLowerCase().includes(q) ||
+                    a.shortDesc.toLowerCase().includes(q) ||
+                    a.fullDesc.toLowerCase().includes(q) ||
+                    (a.version || '').toLowerCase().includes(q)
+                );
+            }
+            // Sort newest first
+            apps.sort((a, b) => new Date(b.dateAdded || 0) - new Date(a.dateAdded || 0));
+            return apps;
+        }
+
+        function renderApps() {
+            const grid = document.getElementById('appsGrid');
+            const apps = getFilteredApps();
+
+            if (apps.length === 0) {
+                grid.innerHTML = `
+                <div class="empty-state">
+                  <span class="empty-icon">📭</span>
+                  <p>لا توجد تطبيقات متطابقة مع البحث أو الفئة المحددة</p>
+                  <small style="color:var(--text-muted);">جرب تغيير معايير البحث أو <span style="color:var(--accent-light);cursor:pointer;" onclick="resetFilters()">اضغط هنا للعودة للكل</span></small>
+                </div>`;
+            } else {
+                grid.innerHTML = apps.map(app => `
+                <div class="app-card" onclick="openAppDetail('${app.id}')" title="اضغط للمزيد من التفاصيل">
+                  <div class="app-card-top">
+                    <div class="app-icon">${app.icon || getCategoryIcon(app.category)}</div>
+                    <div class="app-card-info">
+                      <div class="app-name-ar">${escapeHTML(app.nameAr)}</div>
+                      <div class="app-name-en">${escapeHTML(app.nameEn)}</div>
+                      ${app.version ? `<span class="app-version-badge">v${escapeHTML(app.version)}</span>` : ''}
+                    </div>
+                  </div>
+                  <div class="app-short-desc">${escapeHTML(app.shortDesc || 'لا يوجد وصف')}</div>
+                  <div class="app-card-bottom">
+                    <span class="app-downloads-mini">⬇️ ${(app.downloads || 0) >= 1000 ? ((app.downloads||0)/1000).toFixed(1)+'k' : (app.downloads||0)}</span>
+                    <button class="btn-download-sm" onclick="event.stopPropagation();downloadApp('${app.id}')">⬇️ تحميل</button>
+                  </div>
+                </div>`).join('');
+            }
+            updateStats();
+        }
+
+        function getCategoryIcon(cat) {
+            const icons = { pc: '🖥️', phone: '📱', educational: '📚', other: '📌' };
+            return icons[cat] || '📦';
+        }
+
+        function escapeHTML(str) {
+            const div = document.createElement('div');
+            div.textContent = str || '';
+            return div.innerHTML;
+        }
+
+        // ==================== APP DETAIL MODAL ====================
+        function openAppDetail(appId) {
+            const app = appData.apps.find(a => a.id === appId);
+            if (!app) return;
+            const modal = document.getElementById('appDetailModal');
+            const content = document.getElementById('appDetailContent');
+            content.innerHTML = `
+            <div class="modal-app-icon">${app.icon || getCategoryIcon(app.category)}</div>
+            <div class="modal-app-name-ar">${escapeHTML(app.nameAr)}</div>
+            <div class="modal-app-name-en">${escapeHTML(app.nameEn)}</div>
+            <div class="modal-meta">
+              ${app.version ? `<span>📌 الإصدار: ${escapeHTML(app.version)}</span>` : ''}
+              <span>📂 الفئة: ${getCategoryLabel(app.category)}</span>
+              ${app.fileSize ? `<span>📦 الحجم: ${escapeHTML(app.fileSize)}</span>` : ''}
+              <span>⬇️ التحميلات: ${app.downloads || 0}</span>
+              ${app.dateAdded ? `<span>📅 أُضيف: ${new Date(app.dateAdded).toLocaleDateString('ar-SA')}</span>` : ''}
+            </div>
+            <div class="modal-full-desc">${(app.fullDesc || app.shortDesc || 'لا يوجد وصف تفصيلي').replace(/\n/g, '<br>')}</div>
+            <button class="btn-download-lg" onclick="downloadApp('${app.id}')">⬇️ تحميل التطبيق الآن</button>
+          `;
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeAppDetail(event) {
+            if (event && event.target !== document.getElementById('appDetailModal')) return;
+            document.getElementById('appDetailModal').style.display = 'none';
+            document.body.style.overflow = '';
+        }
+
+        function getCategoryLabel(cat) {
+            const labels = { pc: 'تطبيقات الحاسوب', phone: 'تطبيقات الهاتف', educational: 'مواد تعليمية',
+            other: 'أخرى' };
+            return labels[cat] || 'أخرى';
+        }
+
+        // ==================== DOWNLOAD ====================
+        async function downloadApp(appId) {
+            const app = appData.apps.find(a => a.id === appId);
+            if (!app) return showToast('⚠️ التطبيق غير موجود!', 'error');
+
+            if (!app.telegramFileId) {
+                showToast('⚠️ هذا التطبيق تجريبي ولا يحتوي على ملف. قم بإعداد تيليجرام ورفع ملف حقيقي من لوحة التحكم.', 'info');
+                return;
+            }
+            if (!settings.botToken) {
+                showToast('⚠️ لم يتم إعداد بوت تيليجرام بعد. الرجاء التوجه للوحة التحكم.', 'error');
+                return;
+            }
+
+            try {
+                showToast('⏳ جاري تجهيز التحميل...', 'info');
+                const getFileUrl =
+                    `https://api.telegram.org/bot${settings.botToken}/getFile?file_id=${encodeURIComponent(app.telegramFileId)}`;
+                const resp = await fetch(getFileUrl);
+                const data = await resp.json();
+                if (!data.ok) throw new Error(data.description || 'فشل في جلب الملف');
+                const filePath = data.result.file_path;
+                const downloadUrl = `https://api.telegram.org/file/bot${settings.botToken}/${filePath}`;
+
+                // Increment download counter
+                app.downloads = (app.downloads || 0) + 1;
+                saveData(appData);
+                updateStats();
+                renderApps();
+
+                // Trigger download
+                const a = document.createElement('a');
+                a.href = downloadUrl;
+                a.download = app.fileName || app.nameEn || 'download';
+                a.target = '_blank';
+                a.rel = 'noopener';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                showToast('✅ تم بدء التحميل! شكرًا لثقتك.', 'success');
+            } catch (err) {
+                console.error('Download error:', err);
+                showToast('❌ فشل التحميل: ' + err.message, 'error');
+            }
+        }
+
+        // ==================== CATEGORY FILTERS ====================
+        function setCategory(cat) {
+            currentCategory = cat;
+            document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+            const activeBtn = document.querySelector(`.cat-btn[data-cat="${cat}"]`);
+            if (activeBtn) activeBtn.classList.add('active');
+            renderApps();
+        }
+
+        function resetFilters() {
+            currentCategory = 'all';
+            searchQuery = '';
+            document.getElementById('searchInput').value = '';
+            document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+            const allBtn = document.querySelector('.cat-btn[data-cat="all"]');
+            if (allBtn) allBtn.classList.add('active');
+            renderApps();
+        }
+
+        // ==================== SEARCH ====================
+        document.getElementById('searchInput').addEventListener('input', function() {
+            searchQuery = this.value;
+            renderApps();
+        });
+
+        // ==================== CATEGORY BUTTON CLICKS ====================
+        document.getElementById('categoriesRow').addEventListener('click', function(e) {
+            const btn = e.target.closest('.cat-btn');
+            if (!btn) return;
+            setCategory(btn.dataset.cat);
+        });
+
+        // ==================== ADMIN PANEL ====================
+        function openAdminLogin() {
+            document.getElementById('adminLoginModal').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+            setTimeout(() => {
+                document.getElementById('adminPasswordInput').focus();
+            }, 200);
+        }
+
+        function closeAdminLogin(event) {
+            if (event && event.target !== document.getElementById('adminLoginModal')) return;
+            document.getElementById('adminLoginModal').style.display = 'none';
+            document.body.style.overflow = '';
+            document.getElementById('adminPasswordInput').value = '';
+        }
+
+        function verifyAdminLogin() {
+            const input = document.getElementById('adminPasswordInput').value.trim();
+            if (input === settings.adminPassword) {
+                document.getElementById('adminLoginModal').style.display = 'none';
+                document.body.style.overflow = '';
+                document.getElementById('adminPasswordInput').value = '';
+                openAdminPanel();
+            } else {
+                showToast('❌ كلمة المرور غير صحيحة!', 'error');
+                document.getElementById('adminPasswordInput').value = '';
+                document.getElementById('adminPasswordInput').focus();
+            }
+        }
+
+        function openAdminPanel() {
+            document.getElementById('adminPanel').style.display = 'flex';
+            document.getElementById('adminPanel').classList.add('open');
+            document.body.style.overflow = 'hidden';
+            populateAdminForm();
+            renderAdminAppList();
+            // Load telegram settings into form
+            document.getElementById('tgBotToken').value = settings.botToken || '';
+            document.getElementById('tgChatId').value = settings.chatId || '';
+        }
+
+        function closeAdminPanel(event) {
+            if (event && event.target !== document.getElementById('adminPanel')) return;
+            document.getElementById('adminPanel').style.display = 'none';
+            document.getElementById('adminPanel').classList.remove('open');
+            document.body.style.overflow = '';
+            resetForm();
+            renderApps();
+            updateStats();
+        }
+
+        function populateAdminForm(app = null) {
+            if (app) {
+                document.getElementById('formTitle').textContent = '✏️ تعديل تطبيق';
+                document.getElementById('editingAppId').value = app.id;
+                document.getElementById('appNameAr').value = app.nameAr || '';
+                document.getElementById('appNameEn').value = app.nameEn || '';
+                document.getElementById('appVersion').value = app.version || '';
+                document.getElementById('appCategory').value = app.category || 'pc';
+                document.getElementById('appShortDesc').value = app.shortDesc || '';
+                document.getElementById('appFullDesc').value = app.fullDesc || '';
+            } else {
+                resetForm();
+            }
+        }
+
+        function resetForm() {
+            document.getElementById('formTitle').textContent = '➕ إضافة تطبيق جديد';
+            document.getElementById('editingAppId').value = '';
+            document.getElementById('appNameAr').value = '';
+            document.getElementById('appNameEn').value = '';
+            document.getElementById('appVersion').value = '';
+            document.getElementById('appCategory').value = 'pc';
+            document.getElementById('appShortDesc').value = '';
+            document.getElementById('appFullDesc').value = '';
+            document.getElementById('appFileInput').value = '';
+            document.getElementById('uploadProgress').style.display = 'none';
+        }
+
+        async function saveApp() {
+            const nameAr = document.getElementById('appNameAr').value.trim();
+            const nameEn = document.getElementById('appNameEn').value.trim();
+            if (!nameAr || !nameEn) {
+                showToast('⚠️ اسم التطبيق بالعربية والإنجليزية مطلوبان!', 'error');
+                return;
+            }
+            if (!settings.botToken || !settings.chatId) {
+                showToast('⚠️ الرجاء إعداد بوت تيليجرام أولاً!', 'error');
+                return;
+            }
+
+            const editingId = document.getElementById('editingAppId').value;
+            const version = document.getElementById('appVersion').value.trim();
+            const category = document.getElementById('appCategory').value;
+            const shortDesc = document.getElementById('appShortDesc').value.trim();
+            const fullDesc = document.getElementById('appFullDesc').value.trim();
+            const fileInput = document.getElementById('appFileInput');
+            const file = fileInput.files[0];
+
+            let telegramFileId = '';
+            let fileName = '';
+            let fileSize = '';
+
+            // If editing, keep existing file_id if no new file selected
+            if (editingId && !file) {
+                const existingApp = appData.apps.find(a => a.id === editingId);
+                if (existingApp) {
+                    telegramFileId = existingApp.telegramFileId || '';
+                    fileName = existingApp.fileName || '';
+                    fileSize = existingApp.fileSize || '';
+                }
+            }
+
+            // Upload file to Telegram if selected
+            if (file) {
+                if (file.size > 50 * 1024 * 1024) {
+                    showToast('⚠️ حجم الملف يتجاوز 50 ميجابايت (حد البوتات العادية)!', 'error');
+                    return;
+                }
+                document.getElementById('uploadProgress').style.display = 'block';
+                document.getElementById('uploadProgressBar').value = 0;
+                showToast('⏳ جاري رفع الملف إلى تيليجرام...', 'info');
+
+                try {
+                    const formData = new FormData();
+                    formData.append('chat_id', settings.chatId);
+                    formData.append('document', file);
+                    formData.append('caption',
+                        `📦 ${nameAr}\n📌 ${nameEn}\n🔖 v${version || '1.0'}\n📂 ${getCategoryLabel(category)}`);
+
+                    const uploadUrl = `https://api.telegram.org/bot${settings.botToken}/sendDocument`;
+                    const resp = await fetch(uploadUrl, {
+                        method: 'POST',
+                        body: formData,
+                    });
+                    const data = await resp.json();
+                    if (!data.ok) throw new Error(data.description || 'فشل الرفع إلى تيليجرام');
+
+                    telegramFileId = data.result.document.file_id;
+                    fileName = data.result.document.file_name || file.name;
+                    fileSize = formatFileSize(data.result.document.file_size || file.size);
+                    document.getElementById('uploadProgressBar').value = 100;
+                    showToast('✅ تم رفع الملف إلى تيليجرام بنجاح!', 'success');
+                } catch (err) {
+                    console.error('Upload error:', err);
+                    showToast('❌ فشل رفع الملف: ' + err.message, 'error');
+                    document.getElementById('uploadProgress').style.display = 'none';
+                    return;
+                }
+                document.getElementById('uploadProgress').style.display = 'none';
+            }
+
+            const appEntry = {
+                id: editingId || generateId(),
+                nameAr,
+                nameEn,
+                version,
+                category,
+                shortDesc,
+                fullDesc,
+                telegramFileId,
+                fileName,
+                fileSize,
+                downloads: editingId ? (appData.apps.find(a => a.id === editingId)?.downloads || 0) : 0,
+                dateAdded: editingId ? (appData.apps.find(a => a.id === editingId)?.dateAdded || new Date()
+                    .toISOString()) : new Date().toISOString(),
+                icon: getCategoryIcon(category),
+            };
+
+            if (editingId) {
+                const idx = appData.apps.findIndex(a => a.id === editingId);
+                if (idx >= 0) {
+                    appData.apps[idx] = appEntry;
+                }
+            } else {
+                appData.apps.unshift(appEntry);
+            }
+
+            saveData(appData);
+            resetForm();
+            document.getElementById('appFileInput').value = '';
+            renderAdminAppList();
+            renderApps();
+            updateStats();
+            showToast(editingId ? '✅ تم تحديث التطبيق بنجاح!' : '✅ تمت إضافة التطبيق ورفعه بنجاح!', 'success');
+        }
+
+        function generateId() {
+            return 'app_' + Date.now() + '_' + Math.random().toString(36).substr(2, 7);
+        }
+
+        function formatFileSize(bytes) {
+            if (!bytes || bytes === 0) return '0 B';
+            const k = 1024;
+            const sizes = ['B', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        function renderAdminAppList() {
+            const container = document.getElementById('adminAppList');
+            if (appData.apps.length === 0) {
+                container.innerHTML =
+                    '<p style="color:var(--text-muted);text-align:center;">لا توجد تطبيقات بعد. أضف أول تطبيق! 🚀</p>';
+                return;
+            }
+            container.innerHTML = appData.apps.map((app, idx) => `
+            <div class="admin-app-list-item">
+              <span style="font-size:1.5rem;">${app.icon || getCategoryIcon(app.category)}</span>
+              <span class="app-title">${escapeHTML(app.nameAr)} <small style="color:var(--text-muted);">(${escapeHTML(app.nameEn)})</small></span>
+              <span class="app-meta-small">v${escapeHTML(app.version||'?')} | ${app.fileSize||'لا ملف'} | ⬇️${app.downloads||0}</span>
+              <div style="display:flex;gap:6px;">
+                <button class="btn-admin btn-secondary" style="padding:6px 12px;font-size:0.7rem;" onclick="editApp('${app.id}')">✏️ تعديل</button>
+                <button class="btn-admin btn-danger" style="padding:6px 12px;font-size:0.7rem;" onclick="deleteApp('${app.id}')">🗑️ حذف</button>
+              </div>
+            </div>`).join('');
+        }
+
+        function editApp(appId) {
+            const app = appData.apps.find(a => a.id === appId);
+            if (!app) return;
+            populateAdminForm(app);
+            // Scroll to form
+            document.querySelector('.admin-content').scrollTo({ top: 0, behavior: 'smooth' });
+            document.getElementById('appNameAr').focus();
+        }
+
+        function deleteApp(appId) {
+            if (!confirm('هل أنت متأكد من حذف هذا التطبيق؟ (الملف سيبقى على تيليجرام)')) return;
+            appData.apps = appData.apps.filter(a => a.id !== appId);
+            saveData(appData);
+            renderAdminAppList();
+            renderApps();
+            updateStats();
+            resetForm();
+            showToast('🗑️ تم حذف التطبيق.', 'info');
+        }
+
+        function clearAllApps() {
+            if (!confirm('⚠️ هل أنت متأكد من حذف جميع التطبيقات؟ هذا الإجراء لا يمكن التراجع عنه! (الملفات ستبقى على تيليجرام)'))
+                return;
+            if (!confirm('تأكيد نهائي: هل تريد حقًا حذف جميع التطبيقات؟')) return;
+            appData.apps = [];
+            saveData(appData);
+            renderAdminAppList();
+            renderApps();
+            updateStats();
+            resetForm();
+            showToast('🗑️ تم حذف جميع التطبيقات.', 'info');
+        }
+
+        function saveTelegramSettings() {
+            const botToken = document.getElementById('tgBotToken').value.trim();
+            const chatId = document.getElementById('tgChatId').value.trim();
+            settings.botToken = botToken;
+            settings.chatId = chatId;
+            saveSettings(settings);
+            showToast('✅ تم حفظ إعدادات تيليجرام!', 'success');
+        }
+
+        async function testTelegramConnection() {
+            const botToken = document.getElementById('tgBotToken').value.trim();
+            const chatId = document.getElementById('tgChatId').value.trim();
+            if (!botToken || !chatId) {
+                showToast('⚠️ الرجاء إدخال التوكن وChat ID أولاً!', 'error');
+                return;
+            }
+            try {
+                const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
+                const resp = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        chat_id: chatId,
+                        text: '✅ اختبار اتصال من AppCloud | سحابة التطبيقات - تم الاتصال بنجاح! 🚀',
+                    }),
+                });
+                const data = await resp.json();
+                if (data.ok) {
+                    showToast('✅ تم الاتصال بتيليجرام بنجاح! تم إرسال رسالة اختبار للقناة.', 'success');
+                    settings.botToken = botToken;
+                    settings.chatId = chatId;
+                    saveSettings(settings);
+                } else {
+                    throw new Error(data.description || 'فشل الاتصال');
+                }
+            } catch (err) {
+                showToast('❌ فشل الاتصال: ' + err.message, 'error');
+            }
+        }
+
+        function changeAdminPasswordPrompt() {
+            const newPass = prompt('🔑 أدخل كلمة المرور الجديدة (4 أحرف على الأقل):');
+            if (!newPass) return;
+            if (newPass.length < 4) {
+                showToast('⚠️ كلمة المرور يجب أن تكون 4 أحرف على الأقل!', 'error');
+                return;
+            }
+            settings.adminPassword = newPass;
+            saveSettings(settings);
+            showToast('✅ تم تغيير كلمة المرور بنجاح! كلمة المرور الجديدة: ' + newPass, 'success');
+        }
+
+        // ==================== KEYBOARD SHORTCUTS ====================
+        document.addEventListener('keydown', function(e) {
+            // Escape to close modals
+            if (e.key === 'Escape') {
+                if (document.getElementById('adminPanel').style.display === 'flex') {
+                    closeAdminPanel();
+                } else if (document.getElementById('appDetailModal').style.display === 'flex') {
+                    closeAppDetail();
+                } else if (document.getElementById('adminLoginModal').style.display === 'flex') {
+                    closeAdminLogin();
+                }
+            }
+            // Ctrl+Shift+A for admin
+            if (e.ctrlKey && e.shiftKey && e.key === 'A') {
+                e.preventDefault();
+                openAdminLogin();
+            }
+        });
+
+        // ==================== CLOSE MODALS ON OVERLAY CLICK ====================
+        document.getElementById('appDetailModal').addEventListener('click', function(e) {
+            if (e.target === this) closeAppDetail();
+        });
+        document.getElementById('adminLoginModal').addEventListener('click', function(e) {
+            if (e.target === this) closeAdminLogin();
+        });
+
+        // ==================== INITIALIZATION ====================
+        function init() {
+            updateStats();
+            renderApps();
+            // Set initial category counts
+            document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+            const allBtn = document.querySelector('.cat-btn[data-cat="all"]');
+            if (allBtn) allBtn.classList.add('active');
+            console.log('🚀 AppCloud | سحابة التطبيقات - جاهز للعمل!');
+            console.log('💡 نصيحة: استخدم Ctrl+Shift+A للوصول السريع للوحة التحكم');
+            console.log('📖 كلمة المرور الافتراضية: admin123');
+        }
+
+        init();
+    </script>
+</body>
+</html>
