@@ -1306,7 +1306,10 @@
         // ==================== STATE MANAGEMENT ====================
         const STORAGE_KEY = 'appcloud_data';
         const SETTINGS_KEY = 'appcloud_settings';
-
+// ========== إعدادات JSONBin (املأ بياناتك هنا) ==========
+const JSONBIN_BIN_ID = '6a443f1fda38895dfe1870dd';           // مثال: "67f12345abcd"
+const JSONBIN_MASTER_KEY = '$2a$10$t1UFL/Bdn0WNzC3Vr0Lu0ekzpve/4UII5ymY2YeCSxCk4qiLB7EGi';   // مفتاح الكتابة والقراءة
+const JSONBIN_ACCESS_KEY = 'ضع_هنا_access_key';   // اختياري: للقراءة فقط
         function getDefaultSettings() {
             return {
                 botToken: '8813303336:AAEwRhWSvhagPAqBJQJlwsZsecYUdXJMFMg',
@@ -1337,17 +1340,6 @@
 
         // تحميل البيانات من التخزين المحلي أو من القناة
         async function fetchDataFromChannel() {
-    try // ========== إعدادات JSONBin ==========
-// ضع هنا البيانات التي حصلت عليها من موقع JSONBin
-const JSONBIN_BIN_ID = '6a443f1fda38895dfe1870dd';           // مثال: "67f12345abcd"
-const JSONBIN_MASTER_KEY = '$2a$10$t1UFL/Bdn0WNzC3Vr0Lu0ekzpve/4UII5ymY2YeCSxCk4qiLB7EGi';   // مفتاح القراءة والكتابة (Master Key)
-// يمكنك استخدام Access Key بدلاً من Master Key إذا أردت
-const JSONBIN_ACCESS_KEY = 'ضع_هنا_access_key';   // اختياري: مفتاح وصول ثانوي للقراءة فقط
-
-// ========== الدوال الجديدة ==========
-
-// جلب البيانات من JSONBin
-async function fetchDataFromChannel() {
     if (!JSONBIN_BIN_ID) {
         console.warn('لم يتم تعيين JSONBIN_BIN_ID');
         return null;
@@ -1359,17 +1351,13 @@ async function fetchDataFromChannel() {
         } else if (JSONBIN_ACCESS_KEY) {
             headers['X-Access-Key'] = JSONBIN_ACCESS_KEY;
         }
-        // نطلب الـ Bin
         const url = `https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}/latest`;
         const resp = await fetch(url, { headers });
         const data = await resp.json();
-        // البيانات موجودة داخل data.record (حسب JSONBin v3)
         if (data && data.record) {
-            // نتوقع أن تكون record عبارة عن { apps: [...] }
             if (data.record.apps && Array.isArray(data.record.apps)) {
                 return data.record.apps;
             } else if (Array.isArray(data.record)) {
-                // إذا كانت record مباشرة مصفوفة
                 return data.record;
             }
         }
@@ -1380,15 +1368,14 @@ async function fetchDataFromChannel() {
     }
 }
 
-// تحديث البيانات في JSONBin
-async function syncDataToChannel(apps) {
+async function syncDataToChannel() {
     if (!JSONBIN_BIN_ID || !JSONBIN_MASTER_KEY) {
         console.warn('تأكد من تعيين JSONBIN_BIN_ID و JSONBIN_MASTER_KEY');
         return;
     }
     try {
         const url = `https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`;
-        const body = JSON.stringify({ apps }); // نخزن ككائن يحتوي على apps
+        const body = JSON.stringify({ apps: appData.apps });
         const resp = await fetch(url, {
             method: 'PUT',
             headers: {
