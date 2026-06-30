@@ -1,4 +1,4 @@
-<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
@@ -1335,7 +1335,43 @@
             ];
         }
 
-        function loadData() {
+        // تحميل البيانات من التخزين المحلي أو من القناة
+        async function loadData() {
+            if (settings.botToken && settings.chatId) {
+                try {
+                    const remoteApps = await fetchPinnedApps();
+                    if (remoteApps && Array.isArray(remoteApps) && remoteApps.length > 0) {
+                        console.log('✅ تم تحميل البيانات من الرسالة المثبتة.');
+                        return { apps: remoteApps };
+                    }
+                } catch (e) {
+                    console.warn('تعذر جلب البيانات من القناة، سيتم استخدام التخزين المحلي.');
+                }
+            }
+            return loadLocalApps();
+        }
+
+        async function fetchPinnedApps() {
+            try {
+                const url = `https://api.telegram.org/bot${settings.botToken}/getChat?chat_id=${encodeURIComponent(settings.chatId)}`;
+                const resp = await fetch(url);
+                const data = await resp.json();
+                if (data.ok && data.result.pinned_message && data.result.pinned_message.text) {
+                    const text = data.result.pinned_message.text;
+                    const jsonMatch = text.match(/```json\s*([\s\S]*?)\s*```/);
+                    if (jsonMatch) {
+                        const apps = JSON.parse(jsonMatch[1]);
+                        return apps;
+                    }
+                }
+                return null;
+            } catch (err) {
+                console.error('فشل جلب البيانات من القناة:', err);
+                return null;
+            }
+        }
+
+        function loadLocalApps() {
             try {
                 const raw = localStorage.getItem(STORAGE_KEY);
                 if (raw) {
@@ -1373,7 +1409,7 @@
             }
         }
 
-        let appData = loadData();
+        let appData = { apps: getDefaultApps() }; // قيمة مؤقتة لحين التحميل الفعلي
         let settings = loadSettings();
         let currentCategory = 'all';
         let searchQuery = '';
@@ -1393,21 +1429,13 @@
             const apps = appData.apps;
             document.getElementById('totalApps').textContent = apps.length;
             const totalDl = apps.reduce((sum, a) => sum + (a.downloads || 0), 0);
-            document.getElementById('totalDownloads').textContent = totalDl >= 1000 ? (totalDl / 1000).toFixed(
-                1) + 'k' : totalDl;
+            document.getElementById('totalDownloads').textContent = totalDl >= 1000 ? (totalDl / 1000).toFixed(1) + 'k' : totalDl;
 
-            // Category counts
-            const countAll = apps.length;
-            const countPC = apps.filter(a => a.category === 'pc').length;
-            const countPhone = apps.filter(a => a.category === 'phone').length;
-            const countEdu = apps.filter(a => a.category === 'educational').length;
-            const countOther = apps.filter(a => a.category === 'other').length;
-
-            document.getElementById('countAll').textContent = countAll;
-            document.getElementById('countPC').textContent = countPC;
-            document.getElementById('countPhone').textContent = countPhone;
-            document.getElementById('countEdu').textContent = countEdu;
-            document.getElementById('countOther').textContent = countOther;
+            document.getElementById('countAll').textContent = apps.length;
+            document.getElementById('countPC').textContent = apps.filter(a => a.category === 'pc').length;
+            document.getElementById('countPhone').textContent = apps.filter(a => a.category === 'phone').length;
+            document.getElementById('countEdu').textContent = apps.filter(a => a.category === 'educational').length;
+            document.getElementById('countOther').textContent = apps.filter(a => a.category === 'other').length;
         }
 
         // ==================== RENDER APPS GRID ====================
@@ -1426,7 +1454,6 @@
                     (a.version || '').toLowerCase().includes(q)
                 );
             }
-            // Sort newest first
             apps.sort((a, b) => new Date(b.dateAdded || 0) - new Date(a.dateAdded || 0));
             return apps;
         }
@@ -1434,7 +1461,6 @@
         function renderApps() {
             const grid = document.getElementById('appsGrid');
             const apps = getFilteredApps();
-
             if (apps.length === 0) {
                 grid.innerHTML = `
                 <div class="empty-state">
@@ -1505,51 +1531,59 @@
         }
 
         function getCategoryLabel(cat) {
-            const labels = { pc: 'تطبيقات الحاسوب', phone: 'تطبيقات الهاتف', educational: 'مواد تعليمية',
-            other: 'أخرى' };
+            const labels = { pc: 'تطبيقات الحاسوب', phone: 'تطبيقات الهاتف', educational: 'مواد تعليمية', other: 'أخرى' };
             return labels[cat] || 'أخرى';
         }
 
-        // ==================== DOWNLOAD ====================
+        // ==================== DOWNLOAD (بدون صفحة وسيطة وباسم التطبيق) ====================
         async function downloadApp(appId) {
             const app = appData.apps.find(a => a.id === appId);
             if (!app) return showToast('⚠️ التطبيق غير موجود!', 'error');
-
             if (!app.telegramFileId) {
-                showToast('⚠️ هذا التطبيق تجريبي ولا يحتوي على ملف. قم بإعداد تيليجرام ورفع ملف حقيقي من لوحة التحكم.', 'info');
+                showToast('⚠️ هذا التطبيق لا يحتوي على ملف مرفوع.', 'info');
                 return;
             }
             if (!settings.botToken) {
-                showToast('⚠️ لم يتم إعداد بوت تيليجرام بعد. الرجاء التوجه للوحة التحكم.', 'error');
+                showToast('⚠️ لم يتم إعداد بوت تيليجرام بعد.', 'error');
                 return;
             }
 
             try {
                 showToast('⏳ جاري تجهيز التحميل...', 'info');
-                const getFileUrl =
-                    `https://api.telegram.org/bot${settings.botToken}/getFile?file_id=${encodeURIComponent(app.telegramFileId)}`;
+                const getFileUrl = `https://api.telegram.org/bot${settings.botToken}/getFile?file_id=${encodeURIComponent(app.telegramFileId)}`;
                 const resp = await fetch(getFileUrl);
                 const data = await resp.json();
-                if (!data.ok) throw new Error(data.description || 'فشل في جلب الملف');
+                if (!data.ok) throw new Error(data.description || 'تعذر الحصول على الملف');
                 const filePath = data.result.file_path;
                 const downloadUrl = `https://api.telegram.org/file/bot${settings.botToken}/${filePath}`;
 
-                // Increment download counter
+                const fileResp = await fetch(downloadUrl);
+                if (!fileResp.ok) throw new Error('فشل جلب الملف');
+                const blob = await fileResp.blob();
+
+                let filename = app.fileName || app.nameEn || 'download';
+                if (!filename.includes('.')) {
+                    const originalName = (data.result.file_path || '').split('/').pop() || '';
+                    if (originalName.includes('.')) {
+                        const ext = originalName.split('.').pop();
+                        filename = filename + '.' + ext;
+                    }
+                }
+
+                const blobUrl = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = blobUrl;
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(blobUrl);
+
                 app.downloads = (app.downloads || 0) + 1;
                 saveData(appData);
                 updateStats();
                 renderApps();
-
-                // Trigger download
-                const a = document.createElement('a');
-                a.href = downloadUrl;
-                a.download = app.fileName || app.nameEn || 'download';
-                a.target = '_blank';
-                a.rel = 'noopener';
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                showToast('✅ تم بدء التحميل! شكرًا لثقتك.', 'success');
+                showToast('✅ تم التحميل بنجاح!', 'success');
             } catch (err) {
                 console.error('Download error:', err);
                 showToast('❌ فشل التحميل: ' + err.message, 'error');
@@ -1575,13 +1609,11 @@
             renderApps();
         }
 
-        // ==================== SEARCH ====================
         document.getElementById('searchInput').addEventListener('input', function() {
             searchQuery = this.value;
             renderApps();
         });
 
-        // ==================== CATEGORY BUTTON CLICKS ====================
         document.getElementById('categoriesRow').addEventListener('click', function(e) {
             const btn = e.target.closest('.cat-btn');
             if (!btn) return;
@@ -1592,9 +1624,7 @@
         function openAdminLogin() {
             document.getElementById('adminLoginModal').style.display = 'flex';
             document.body.style.overflow = 'hidden';
-            setTimeout(() => {
-                document.getElementById('adminPasswordInput').focus();
-            }, 200);
+            setTimeout(() => document.getElementById('adminPasswordInput').focus(), 200);
         }
 
         function closeAdminLogin(event) {
@@ -1624,7 +1654,6 @@
             document.body.style.overflow = 'hidden';
             populateAdminForm();
             renderAdminAppList();
-            // Load telegram settings into form
             document.getElementById('tgBotToken').value = settings.botToken || '';
             document.getElementById('tgChatId').value = settings.chatId || '';
         }
@@ -1667,6 +1696,31 @@
             document.getElementById('uploadProgress').style.display = 'none';
         }
 
+        // دالة رفع ملف مع تقدم باستخدام XMLHttpRequest
+        function uploadWithProgress(url, formData, onProgress) {
+            return new Promise((resolve, reject) => {
+                const xhr = new XMLHttpRequest();
+                xhr.open('POST', url);
+                xhr.upload.addEventListener('progress', (e) => {
+                    if (e.lengthComputable) {
+                        const percent = Math.round((e.loaded / e.total) * 100);
+                        onProgress(percent);
+                    }
+                });
+                xhr.onload = () => {
+                    try {
+                        const response = JSON.parse(xhr.responseText);
+                        resolve(response);
+                    } catch (e) {
+                        reject(new Error('استجابة غير صالحة من الخادم'));
+                    }
+                };
+                xhr.onerror = () => reject(new Error('فشل الاتصال بالشبكة'));
+                xhr.ontimeout = () => reject(new Error('انتهت مهلة الرفع'));
+                xhr.send(formData);
+            });
+        }
+
         async function saveApp() {
             const nameAr = document.getElementById('appNameAr').value.trim();
             const nameEn = document.getElementById('appNameEn').value.trim();
@@ -1691,7 +1745,6 @@
             let fileName = '';
             let fileSize = '';
 
-            // If editing, keep existing file_id if no new file selected
             if (editingId && !file) {
                 const existingApp = appData.apps.find(a => a.id === editingId);
                 if (existingApp) {
@@ -1701,36 +1754,33 @@
                 }
             }
 
-            // Upload file to Telegram if selected
             if (file) {
                 if (file.size > 50 * 1024 * 1024) {
                     showToast('⚠️ حجم الملف يتجاوز 50 ميجابايت (حد البوتات العادية)!', 'error');
                     return;
                 }
                 document.getElementById('uploadProgress').style.display = 'block';
-                document.getElementById('uploadProgressBar').value = 0;
+                const progressBar = document.getElementById('uploadProgressBar');
+                progressBar.value = 0;
                 showToast('⏳ جاري رفع الملف إلى تيليجرام...', 'info');
 
+                const formData = new FormData();
+                formData.append('chat_id', settings.chatId);
+                formData.append('document', file);
+                formData.append('caption', `📦 ${nameAr}\n📌 ${nameEn}\n🔖 v${version || '1.0'}\n📂 ${getCategoryLabel(category)}`);
+
                 try {
-                    const formData = new FormData();
-                    formData.append('chat_id', settings.chatId);
-                    formData.append('document', file);
-                    formData.append('caption',
-                        `📦 ${nameAr}\n📌 ${nameEn}\n🔖 v${version || '1.0'}\n📂 ${getCategoryLabel(category)}`);
-
-                    const uploadUrl = `https://api.telegram.org/bot${settings.botToken}/sendDocument`;
-                    const resp = await fetch(uploadUrl, {
-                        method: 'POST',
-                        body: formData,
-                    });
-                    const data = await resp.json();
-                    if (!data.ok) throw new Error(data.description || 'فشل الرفع إلى تيليجرام');
-
-                    telegramFileId = data.result.document.file_id;
-                    fileName = data.result.document.file_name || file.name;
-                    fileSize = formatFileSize(data.result.document.file_size || file.size);
-                    document.getElementById('uploadProgressBar').value = 100;
-                    showToast('✅ تم رفع الملف إلى تيليجرام بنجاح!', 'success');
+                    const result = await uploadWithProgress(
+                        `https://api.telegram.org/bot${settings.botToken}/sendDocument`,
+                        formData,
+                        (percent) => { progressBar.value = percent; }
+                    );
+                    if (!result.ok) throw new Error(result.description || 'فشل الرفع');
+                    telegramFileId = result.result.document.file_id;
+                    fileName = result.result.document.file_name || file.name;
+                    fileSize = formatFileSize(result.result.document.file_size || file.size);
+                    progressBar.value = 100;
+                    showToast('✅ تم رفع الملف بنجاح!', 'success');
                 } catch (err) {
                     console.error('Upload error:', err);
                     showToast('❌ فشل رفع الملف: ' + err.message, 'error');
@@ -1752,21 +1802,19 @@
                 fileName,
                 fileSize,
                 downloads: editingId ? (appData.apps.find(a => a.id === editingId)?.downloads || 0) : 0,
-                dateAdded: editingId ? (appData.apps.find(a => a.id === editingId)?.dateAdded || new Date()
-                    .toISOString()) : new Date().toISOString(),
+                dateAdded: editingId ? (appData.apps.find(a => a.id === editingId)?.dateAdded || new Date().toISOString()) : new Date().toISOString(),
                 icon: getCategoryIcon(category),
             };
 
             if (editingId) {
                 const idx = appData.apps.findIndex(a => a.id === editingId);
-                if (idx >= 0) {
-                    appData.apps[idx] = appEntry;
-                }
+                if (idx >= 0) appData.apps[idx] = appEntry;
             } else {
                 appData.apps.unshift(appEntry);
             }
 
             saveData(appData);
+            updatePinnedMessage(); // تحديث الرسالة المثبتة لمشاركة البيانات
             resetForm();
             document.getElementById('appFileInput').value = '';
             renderAdminAppList();
@@ -1790,8 +1838,7 @@
         function renderAdminAppList() {
             const container = document.getElementById('adminAppList');
             if (appData.apps.length === 0) {
-                container.innerHTML =
-                    '<p style="color:var(--text-muted);text-align:center;">لا توجد تطبيقات بعد. أضف أول تطبيق! 🚀</p>';
+                container.innerHTML = '<p style="color:var(--text-muted);text-align:center;">لا توجد تطبيقات بعد. أضف أول تطبيق! 🚀</p>';
                 return;
             }
             container.innerHTML = appData.apps.map((app, idx) => `
@@ -1810,7 +1857,6 @@
             const app = appData.apps.find(a => a.id === appId);
             if (!app) return;
             populateAdminForm(app);
-            // Scroll to form
             document.querySelector('.admin-content').scrollTo({ top: 0, behavior: 'smooth' });
             document.getElementById('appNameAr').focus();
         }
@@ -1819,6 +1865,7 @@
             if (!confirm('هل أنت متأكد من حذف هذا التطبيق؟ (الملف سيبقى على تيليجرام)')) return;
             appData.apps = appData.apps.filter(a => a.id !== appId);
             saveData(appData);
+            updatePinnedMessage(); // مزامنة الحذف
             renderAdminAppList();
             renderApps();
             updateStats();
@@ -1827,16 +1874,77 @@
         }
 
         function clearAllApps() {
-            if (!confirm('⚠️ هل أنت متأكد من حذف جميع التطبيقات؟ هذا الإجراء لا يمكن التراجع عنه! (الملفات ستبقى على تيليجرام)'))
-                return;
+            if (!confirm('⚠️ هل أنت متأكد من حذف جميع التطبيقات؟ هذا الإجراء لا يمكن التراجع عنه! (الملفات ستبقى على تيليجرام)')) return;
             if (!confirm('تأكيد نهائي: هل تريد حقًا حذف جميع التطبيقات؟')) return;
             appData.apps = [];
             saveData(appData);
+            updatePinnedMessage(); // مزامنة الحذف الجماعي
             renderAdminAppList();
             renderApps();
             updateStats();
             resetForm();
             showToast('🗑️ تم حذف جميع التطبيقات.', 'info');
+        }
+
+        // ==================== TELEGRAM PINNED MESSAGE SYNC ====================
+        async function updatePinnedMessage() {
+            if (!settings.botToken || !settings.chatId) {
+                console.warn('إعدادات تيليجرام غير مكتملة، لا يمكن تحديث الرسالة المثبتة.');
+                return;
+            }
+            try {
+                const appsData = JSON.stringify(appData.apps);
+                const chatInfoUrl = `https://api.telegram.org/bot${settings.botToken}/getChat?chat_id=${encodeURIComponent(settings.chatId)}`;
+                const chatResp = await fetch(chatInfoUrl);
+                const chatData = await chatResp.json();
+                let pinnedMessageId = null;
+                if (chatData.ok && chatData.result.pinned_message) {
+                    pinnedMessageId = chatData.result.pinned_message.message_id;
+                }
+                const messageText = `📋 **بيانات تطبيقات AppCloud** (تحديث تلقائي)\n\`\`\`json\n${appsData}\n\`\`\``;
+                if (pinnedMessageId) {
+                    const editUrl = `https://api.telegram.org/bot${settings.botToken}/editMessageText`;
+                    await fetch(editUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            chat_id: settings.chatId,
+                            message_id: pinnedMessageId,
+                            text: messageText,
+                            parse_mode: 'Markdown'
+                        })
+                    });
+                } else {
+                    const sendUrl = `https://api.telegram.org/bot${settings.botToken}/sendMessage`;
+                    const sendResp = await fetch(sendUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            chat_id: settings.chatId,
+                            text: messageText,
+                            parse_mode: 'Markdown'
+                        })
+                    });
+                    const sendData = await sendResp.json();
+                    if (sendData.ok) {
+                        const newMessageId = sendData.result.message_id;
+                        const pinUrl = `https://api.telegram.org/bot${settings.botToken}/pinChatMessage`;
+                        await fetch(pinUrl, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                chat_id: settings.chatId,
+                                message_id: newMessageId,
+                                disable_notification: true
+                            })
+                        });
+                    }
+                }
+                console.log('✅ تم تحديث الرسالة المثبتة.');
+            } catch (err) {
+                console.error('فشل تحديث الرسالة المثبتة:', err);
+                showToast('⚠️ حدث خطأ أثناء مزامنة البيانات مع القناة.', 'error');
+            }
         }
 
         function saveTelegramSettings() {
@@ -1893,7 +2001,6 @@
 
         // ==================== KEYBOARD SHORTCUTS ====================
         document.addEventListener('keydown', function(e) {
-            // Escape to close modals
             if (e.key === 'Escape') {
                 if (document.getElementById('adminPanel').style.display === 'flex') {
                     closeAdminPanel();
@@ -1903,14 +2010,12 @@
                     closeAdminLogin();
                 }
             }
-            // Ctrl+Shift+A for admin
             if (e.ctrlKey && e.shiftKey && e.key === 'A') {
                 e.preventDefault();
                 openAdminLogin();
             }
         });
 
-        // ==================== CLOSE MODALS ON OVERLAY CLICK ====================
         document.getElementById('appDetailModal').addEventListener('click', function(e) {
             if (e.target === this) closeAppDetail();
         });
@@ -1919,15 +2024,16 @@
         });
 
         // ==================== INITIALIZATION ====================
-        function init() {
+        async function init() {
+            appData = await loadData();  // تحميل البيانات (من القناة أو محلي)
+            saveData(appData);           // تخزين نسخة محلية
             updateStats();
             renderApps();
-            // Set initial category counts
             document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
             const allBtn = document.querySelector('.cat-btn[data-cat="all"]');
             if (allBtn) allBtn.classList.add('active');
             console.log('🚀 AppCloud | سحابة التطبيقات - جاهز للعمل!');
-            console.log('💡 نصيحة: استخدم Ctrl+Shift+A للوصول السريع للوحة التحكم');
+            console.log('💡 استخدم Ctrl+Shift+A للوصول السريع للوحة التحكم');
             console.log('📖 كلمة المرور الافتراضية: admin123');
         }
 
