@@ -1336,50 +1336,91 @@
         }
 
         // تحميل البيانات من التخزين المحلي أو من القناة
-        async function loadData() {
-            if (settings.botToken && settings.chatId) {
-                try {
-                    const remoteApps = await fetchDataFromChannel();
-                    if (remoteApps && Array.isArray(remoteApps) && remoteApps.length > 0) {
-                        console.log('✅ تم تحميل البيانات من القناة.');
-                        return { apps: remoteApps };
-                    }
-                } catch (e) {
-                    console.warn('تعذر جلب البيانات من القناة، سيتم استخدام التخزين المحلي.');
+        async function fetchDataFromChannel() {
+    try {
+        // استخدام getChat لجلب معلومات القناة، ومنها الرسالة المثبتة
+        const url = `https://api.telegram.org/bot${settings.botToken}/getChat?chat_id=${encodeURIComponent(settings.chatId)}`;
+        const resp = await fetch(url);
+        const data = await resp.json();
+        if (data.ok && data.result.pinned_message && data.result.pinned_message.text) {
+            const text = data.result.pinned_message.text;
+            const jsonMatch = text.match(/```json\s*([\s\S]*?)\s*```/);
+            if (jsonMatch) {
+                const apps = JSON.parse(jsonMatch[1]);
+                if (Array.isArray(apps)) {
+                    console.log('✅ تم تحميل البيانات من الرسالة المثبتة.');
+                    return apps;
                 }
             }
-            return loadLocalApps();
+        }
+        return null;
+    } catch (err) {
+        console.error('فشل جلب البيانات من الرسالة المثبتة:', err);
+        return null;
+    }
+}
+
+async function syncDataToChannel() {
+    if (!settings.botToken || !settings.chatId) return;
+    try {
+        const appsData = JSON.stringify(appData.apps);
+        const messageText = `📋 **بيانات تطبيقات AppCloud** (تحديث تلقائي)\n\`\`\`json\n${appsData}\n\`\`\``;
+        
+        // أولاً: نحصل على معرف الرسالة المثبتة الحالية (إن وجدت)
+        let pinnedMessageId = null;
+        const chatInfoUrl = `https://api.telegram.org/bot${settings.botToken}/getChat?chat_id=${encodeURIComponent(settings.chatId)}`;
+        const chatResp = await fetch(chatInfoUrl);
+        const chatData = await chatResp.json();
+        if (chatData.ok && chatData.result.pinned_message) {
+            pinnedMessageId = chatData.result.pinned_message.message_id;
         }
 
-        async function fetchDataFromChannel() {
-            try {
-                const url = `https://api.telegram.org/bot${settings.botToken}/getUpdates?limit=50`;
-                const resp = await fetch(url);
-                const data = await resp.json();
-                if (!data.ok || !data.result) return null;
-                // نبحث عن آخر رسالة تحتوي على JSON في النص
-                const updates = data.result.reverse(); // الأحدث أولاً
-                for (let update of updates) {
-                    if (update.channel_post && update.channel_post.text) {
-                        const text = update.channel_post.text;
-                        const jsonMatch = text.match(/```json\s*([\s\S]*?)\s*```/);
-                        if (jsonMatch) {
-                            try {
-                                const apps = JSON.parse(jsonMatch[1]);
-                                if (Array.isArray(apps)) {
-                                    console.log('✅ تم العثور على بيانات التطبيقات في الرسالة.');
-                                    return apps;
-                                }
-                            } catch (e) {}
-                        }
-                    }
-                }
-                return null;
-            } catch (err) {
-                console.error('فشل جلب البيانات من القناة:', err);
-                return null;
+        if (pinnedMessageId) {
+            // تعديل الرسالة المثبتة الموجودة
+            const editUrl = `https://api.telegram.org/bot${settings.botToken}/editMessageText`;
+            await fetch(editUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    chat_id: settings.chatId,
+                    message_id: pinnedMessageId,
+                    text: messageText,
+                    parse_mode: 'Markdown'
+                })
+            });
+        } else {
+            // إرسال رسالة جديدة وتثبيتها
+            const sendUrl = `https://api.telegram.org/bot${settings.botToken}/sendMessage`;
+            const sendResp = await fetch(sendUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    chat_id: settings.chatId,
+                    text: messageText,
+                    parse_mode: 'Markdown'
+                })
+            });
+            const sendData = await sendResp.json();
+            if (sendData.ok) {
+                const newMessageId = sendData.result.message_id;
+                const pinUrl = `https://api.telegram.org/bot${settings.botToken}/pinChatMessage`;
+                await fetch(pinUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        chat_id: settings.chatId,
+                        message_id: newMessageId,
+                        disable_notification: true
+                    })
+                });
             }
         }
+        console.log('✅ تم تحديث الرسالة المثبتة.');
+    } catch (err) {
+        console.error('فشل تحديث الرسالة المثبتة:', err);
+        showToast('⚠️ تعذر مزامنة البيانات مع القناة.', 'error');
+    }
+}
 
         function loadLocalApps() {
             try {
