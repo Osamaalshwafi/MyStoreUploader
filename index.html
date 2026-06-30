@@ -1337,91 +1337,77 @@
 
         // تحميل البيانات من التخزين المحلي أو من القناة
         async function fetchDataFromChannel() {
+    try // ========== إعدادات JSONBin ==========
+// ضع هنا البيانات التي حصلت عليها من موقع JSONBin
+const JSONBIN_BIN_ID = '6a443f1fda38895dfe1870dd';           // مثال: "67f12345abcd"
+const JSONBIN_MASTER_KEY = '$2a$10$t1UFL/Bdn0WNzC3Vr0Lu0ekzpve/4UII5ymY2YeCSxCk4qiLB7EGi';   // مفتاح القراءة والكتابة (Master Key)
+// يمكنك استخدام Access Key بدلاً من Master Key إذا أردت
+const JSONBIN_ACCESS_KEY = 'ضع_هنا_access_key';   // اختياري: مفتاح وصول ثانوي للقراءة فقط
+
+// ========== الدوال الجديدة ==========
+
+// جلب البيانات من JSONBin
+async function fetchDataFromChannel() {
+    if (!JSONBIN_BIN_ID) {
+        console.warn('لم يتم تعيين JSONBIN_BIN_ID');
+        return null;
+    }
     try {
-        // استخدام getChat لجلب معلومات القناة، ومنها الرسالة المثبتة
-        const url = `https://api.telegram.org/bot${settings.botToken}/getChat?chat_id=${encodeURIComponent(settings.chatId)}`;
-        const resp = await fetch(url);
+        const headers = {};
+        if (JSONBIN_MASTER_KEY) {
+            headers['X-Master-Key'] = JSONBIN_MASTER_KEY;
+        } else if (JSONBIN_ACCESS_KEY) {
+            headers['X-Access-Key'] = JSONBIN_ACCESS_KEY;
+        }
+        // نطلب الـ Bin
+        const url = `https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}/latest`;
+        const resp = await fetch(url, { headers });
         const data = await resp.json();
-        if (data.ok && data.result.pinned_message && data.result.pinned_message.text) {
-            const text = data.result.pinned_message.text;
-            const jsonMatch = text.match(/```json\s*([\s\S]*?)\s*```/);
-            if (jsonMatch) {
-                const apps = JSON.parse(jsonMatch[1]);
-                if (Array.isArray(apps)) {
-                    console.log('✅ تم تحميل البيانات من الرسالة المثبتة.');
-                    return apps;
-                }
+        // البيانات موجودة داخل data.record (حسب JSONBin v3)
+        if (data && data.record) {
+            // نتوقع أن تكون record عبارة عن { apps: [...] }
+            if (data.record.apps && Array.isArray(data.record.apps)) {
+                return data.record.apps;
+            } else if (Array.isArray(data.record)) {
+                // إذا كانت record مباشرة مصفوفة
+                return data.record;
             }
         }
         return null;
     } catch (err) {
-        console.error('فشل جلب البيانات من الرسالة المثبتة:', err);
+        console.error('فشل جلب البيانات من JSONBin:', err);
         return null;
     }
 }
 
-async function syncDataToChannel() {
-    if (!settings.botToken || !settings.chatId) return;
+// تحديث البيانات في JSONBin
+async function syncDataToChannel(apps) {
+    if (!JSONBIN_BIN_ID || !JSONBIN_MASTER_KEY) {
+        console.warn('تأكد من تعيين JSONBIN_BIN_ID و JSONBIN_MASTER_KEY');
+        return;
+    }
     try {
-        const appsData = JSON.stringify(appData.apps);
-        const messageText = `📋 **بيانات تطبيقات AppCloud** (تحديث تلقائي)\n\`\`\`json\n${appsData}\n\`\`\``;
-        
-        // أولاً: نحصل على معرف الرسالة المثبتة الحالية (إن وجدت)
-        let pinnedMessageId = null;
-        const chatInfoUrl = `https://api.telegram.org/bot${settings.botToken}/getChat?chat_id=${encodeURIComponent(settings.chatId)}`;
-        const chatResp = await fetch(chatInfoUrl);
-        const chatData = await chatResp.json();
-        if (chatData.ok && chatData.result.pinned_message) {
-            pinnedMessageId = chatData.result.pinned_message.message_id;
-        }
-
-        if (pinnedMessageId) {
-            // تعديل الرسالة المثبتة الموجودة
-            const editUrl = `https://api.telegram.org/bot${settings.botToken}/editMessageText`;
-            await fetch(editUrl, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    chat_id: settings.chatId,
-                    message_id: pinnedMessageId,
-                    text: messageText,
-                    parse_mode: 'Markdown'
-                })
-            });
+        const url = `https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`;
+        const body = JSON.stringify({ apps }); // نخزن ككائن يحتوي على apps
+        const resp = await fetch(url, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Master-Key': JSONBIN_MASTER_KEY
+            },
+            body
+        });
+        const data = await resp.json();
+        if (data && data.record) {
+            console.log('✅ تم تحديث البيانات في JSONBin');
         } else {
-            // إرسال رسالة جديدة وتثبيتها
-            const sendUrl = `https://api.telegram.org/bot${settings.botToken}/sendMessage`;
-            const sendResp = await fetch(sendUrl, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    chat_id: settings.chatId,
-                    text: messageText,
-                    parse_mode: 'Markdown'
-                })
-            });
-            const sendData = await sendResp.json();
-            if (sendData.ok) {
-                const newMessageId = sendData.result.message_id;
-                const pinUrl = `https://api.telegram.org/bot${settings.botToken}/pinChatMessage`;
-                await fetch(pinUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        chat_id: settings.chatId,
-                        message_id: newMessageId,
-                        disable_notification: true
-                    })
-                });
-            }
+            throw new Error('استجابة غير متوقعة من JSONBin');
         }
-        console.log('✅ تم تحديث الرسالة المثبتة.');
     } catch (err) {
-        console.error('فشل تحديث الرسالة المثبتة:', err);
-        showToast('⚠️ تعذر مزامنة البيانات مع القناة.', 'error');
+        console.error('فشل تحديث JSONBin:', err);
+        showToast('⚠️ فشل مزامنة البيانات مع JSONBin', 'error');
     }
 }
-
         function loadLocalApps() {
             try {
                 const raw = localStorage.getItem(STORAGE_KEY);
