@@ -1835,6 +1835,7 @@ async function syncDataToChannel() {
                 if (idx >= 0) appData.apps[idx] = appEntry;
             } else {
                 appData.apps.unshift(appEntry);
+                await syncDataToChannel();
             }
 
             saveData(appData);
@@ -1883,6 +1884,7 @@ async function syncDataToChannel() {
             populateAdminForm(app);
             document.querySelector('.admin-content').scrollTo({ top: 0, behavior: 'smooth' });
             document.getElementById('appNameAr').focus();
+            await syncDataToChannel();
         }
 
         function deleteApp(appId) {
@@ -1895,6 +1897,7 @@ async function syncDataToChannel() {
             updateStats();
             resetForm();
             showToast('🗑️ تم حذف التطبيق.', 'info');
+            await syncDataToChannel();
         }
 
         function clearAllApps() {
@@ -1907,7 +1910,9 @@ async function syncDataToChannel() {
             renderApps();
             updateStats();
             resetForm();
+           
             showToast('🗑️ تم حذف جميع التطبيقات.', 'info');
+            await syncDataToChannel();
         }
 
         // ==================== مشاركة البيانات عبر قناة تيليجرام (JSON داخل رسالة) ====================
